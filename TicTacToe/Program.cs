@@ -32,7 +32,7 @@ namespace TicTacToe
 			table.Controls.Add(textBox, 0, 0);
 			table.SetColumnSpan(textBox, 3);
 
-			for (int column = 0; column <= size; column++)
+			for (int column = 0; column < size; column++)
 				for (int row = 1; row <= size; row++)
 				{
 					var iRow = row;

@@ -7,8 +7,8 @@ namespace TicTacToe
     public class GameModel
     {
         public readonly GamePlace gamePlace;
-        private Player firstPlayer;
-        private Player secondPlayer;
+        public readonly Player firstPlayer;
+        public readonly Player secondPlayer;
         public readonly GameStatus gameStatus;
 
         public GameModel()
@@ -38,25 +38,20 @@ namespace TicTacToe
             if (gamePlace.GetStatesField(row, column) != StatesField.EmptyField)
                 return;
 
-            PlayerMove(row, column, gameStatus.GetOrderPlayerTurn());
+            if (gameStatus.GetOrderPlayerTurn() == MoveState.FirstPlayerMove)
+                PlayerMove(row, column, firstPlayer);
+            else
+                PlayerMove(row, column, secondPlayer);
 
             gameStatus.SetGameStatus(gamePlace);
 
             gameStatus.SetOrderPlayerTurn();
         }
 
-        private void PlayerMove(int row, int column, MoveState orderPlayerTurn)
+        private void PlayerMove(int row, int column, Player player)
         {
-            if (orderPlayerTurn == MoveState.FirstPlayerMove)
-            {
-                firstPlayer.Move(row, column, gamePlace);
-                SetState(row, column, StatesField.Cross);
-            }
-            else
-            {
-                secondPlayer.Move(row, column, gamePlace);
-                SetState(row, column, StatesField.Zero);
-            }
+                player.Move(row, column, gamePlace);
+                SetState(row, column, player.playerSymbol);
         }
 
         public event Action<int, int, StatesField> StateChanged;

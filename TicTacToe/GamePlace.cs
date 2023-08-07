@@ -16,7 +16,7 @@
             for (int column = 0; column < size; column++)
                 for (int row = 0; row < size; row++)
                     place[column, row] = StatesField.EmptyField; ; 
-        }
+        } 
 
         public void ChangeFieldState(int row, int column, StatesField state) 
         {

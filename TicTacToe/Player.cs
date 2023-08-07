@@ -2,7 +2,7 @@
 {
     public class Player
     {
-        readonly StatesField playerSymbol;
+        public readonly StatesField playerSymbol;
 
         public Player(StatesField symbol)
         {
