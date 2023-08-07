@@ -16,14 +16,15 @@ namespace TicTacToe
         public TicTacToeForm(GameModel game)
         {
 			this.game = game;
+			var size = game.gamePlace.size;
 			table = new TableLayoutPanel();
 
 			table.RowStyles.Add(new RowStyle(SizeType.Percent, 10f));
 
-			for (int i = 0; i < game.size; i++)
+			for (int i = 0; i < size; i++)
 			{
-				table.RowStyles.Add(new RowStyle(SizeType.Percent, 90f / game.size));
-				table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / game.size));
+				table.RowStyles.Add(new RowStyle(SizeType.Percent, 90f / size));
+				table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / size));
 			}
 
 			TextBox textBox = new TextBox();
@@ -31,8 +32,8 @@ namespace TicTacToe
 			table.Controls.Add(textBox, 0, 0);
 			table.SetColumnSpan(textBox, 3);
 
-			for (int column = 0; column <= game.size; column++)
-				for (int row = 1; row <= game.size; row++)
+			for (int column = 0; column <= size; column++)
+				for (int row = 1; row <= size; row++)
 				{
 					var iRow = row;
 					var iColumn = column;
@@ -41,7 +42,7 @@ namespace TicTacToe
 					button.Click += (sender, args) =>
 						{
 							game.Move(iRow - 1, iColumn);
-							textBox.Text = game.GetGameStatus();
+							textBox.Text = game.gameStatus.GetGameStatusToString();
 						};
 					table.Controls.Add(button, iColumn, iRow);
 				}

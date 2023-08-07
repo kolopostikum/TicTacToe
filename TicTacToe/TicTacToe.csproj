@@ -49,8 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameModel.cs" />
+    <Compile Include="GamePlace.cs" />
     <Compile Include="GameState.cs" />
+    <Compile Include="GameStatus.cs" />
     <Compile Include="MoveState.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs">
       <SubType>Form</SubType>
     </Compile>
