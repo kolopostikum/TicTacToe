@@ -5,70 +5,69 @@ namespace TicTacToe
 {
     public class GameModel
     {
-        StatesField[,] Game;
-        public readonly int Size = 3;
-        GameState StatusGame;
-        MoveState OrderPlayerTurn;
-        string Winner;
+        private StatesField[,] game;
+        readonly public int size = 3;
+        private GameState statusGame;
+        private MoveState orderPlayerTurn;
+        private string winner;
 
         public GameModel()
         {
-            Game = new StatesField[Size, Size];
-            StatusGame = GameState.InProcees;
-            OrderPlayerTurn = MoveState.FirstPlayerMove;
+            game = new StatesField[size, size];
+            statusGame = GameState.InProcees;
+            orderPlayerTurn = MoveState.FirstPlayerMove;
         }
 
         public void Start()
         {
-            for (int column = 0; column < Size; column++)
-                for (int row = 0; row < Size; row++)
-                    Game[column, row] = StatesField.EmptyField;
+            for (int column = 0; column < size; column++)
+                for (int row = 0; row < size; row++)
+                    game[column, row] = StatesField.EmptyField;
         }
 
-        void SetState(int row, int column, StatesField state)
+        private void SetState(int row, int column, StatesField state)
         {
-            Game[row, column] = state;
-            if (StateChanged != null) StateChanged(row, column, Game[row, column]);
+            game[row, column] = state;
+            if (StateChanged != null) StateChanged(row, column, game[row, column]);
         }
 
         public GameState Move(int row, int column)
         {
-            if (StatusGame == GameState.IsOver)
+            if (statusGame == GameState.IsOver)
                 return GameState.IsOver;
 
-            if (Game[row, column] == StatesField.EmptyField)
+            if (game[row, column] == StatesField.EmptyField)
             {
-                if (OrderPlayerTurn == MoveState.FirstPlayerMove)
+                if (orderPlayerTurn == MoveState.FirstPlayerMove)
                     SetState(row, column, StatesField.Cross);
                 else
                     SetState(row, column, StatesField.Zero);
             }
             else
-                return StatusGame;
+                return statusGame;
 
             if (CheckWin())
             { 
-                StatusGame = GameState.IsOver;
-                Winner = OrderPlayerTurn == MoveState.FirstPlayerMove
+                statusGame = GameState.IsOver;
+                winner = orderPlayerTurn == MoveState.FirstPlayerMove
                 ? "First Player" : "Second Player";
             }
-
-            if (CheckDraw())
+            else if (CheckDraw())
             { 
-                StatusGame = GameState.IsOver;
-                Winner = "Draw";
+                statusGame = GameState.IsOver;
+                winner = "Draw";
             }
 
-            OrderPlayerTurn = OrderPlayerTurn == MoveState.FirstPlayerMove
+            orderPlayerTurn = orderPlayerTurn == MoveState.FirstPlayerMove
                 ? MoveState.SecondPlayerMove : MoveState.FirstPlayerMove;
-            return StatusGame;
+            return statusGame;
         }
 
         private bool CheckDraw()
         {
             int count = 9;
 
-            foreach (var field in Game)
+            foreach (var field in game)
             {
                 if (field != StatesField.EmptyField)
                     count--;
@@ -79,7 +78,7 @@ namespace TicTacToe
 
         public bool CheckWin()
         {
-            for (int i = 0; i < Size; i++)
+            for (int i = 0; i < size; i++)
             {
                 if (CheckLine(i) || CheckRowe(i))
                     return true;
@@ -91,30 +90,32 @@ namespace TicTacToe
 
         private bool CheckDiagonals()
         {
-            return ( Game[0, 0] == Game[1, 1]
-                && Game[1, 1] == Game[2, 2]
-                && Game[1, 1] != StatesField.EmptyField)
-                ||
-                (  Game[0, 2] == Game[1, 1]
-                && Game[1, 1] == Game[2, 0]
-                && Game[1, 1] != StatesField.EmptyField) ;
+            var diagonalLeftWin = (game[0, 2] == game[1, 1]
+                && game[1, 1] == game[2, 0]
+                && game[1, 1] != StatesField.EmptyField);
+            
+            var diagonalRightWin = (game[0, 0] == game[1, 1]
+                && game[1, 1] == game[2, 2]
+                && game[1, 1] != StatesField.EmptyField);
+
+            return diagonalLeftWin || diagonalRightWin;
         }
 
-        private bool CheckRowe(int i)
+        private bool CheckRowe(int numberOfRow)
         {
             return (
-                Game[0, i] == Game[1, i]
-                && Game[1, i] == Game[2, i]
-                && Game[0, i] != StatesField.EmptyField
+                game[0, numberOfRow] == game[1, numberOfRow]
+                && game[1, numberOfRow] == game[2, numberOfRow]
+                && game[0, numberOfRow] != StatesField.EmptyField
                 );
         }
 
-        private bool CheckLine(int i)
+        private bool CheckLine(int numberOfLine)
         {
             return (
-                Game[i, 0] == Game[i, 1]
-                && Game[i, 1] == Game[i, 2]
-                && Game[i, 0] != StatesField.EmptyField
+                game[numberOfLine, 0] == game[numberOfLine, 1]
+                && game[numberOfLine, 1] == game[numberOfLine, 2]
+                && game[numberOfLine, 0] != StatesField.EmptyField
                 );
         }
 
@@ -122,10 +123,10 @@ namespace TicTacToe
 
         public string GetGameStatus()
         {
-            if (Winner == null)
+            if (winner == null)
                 return "Game in process";
-            if (Winner == "First Player" || Winner == "Second Player")
-                return Winner + " Win";
+            if (winner == "First Player" || winner == "Second Player")
+                return winner + " Win";
             return "Draw";
         }
     }

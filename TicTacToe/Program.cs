@@ -8,40 +8,40 @@ using TicTacToe;
 
 namespace TicTacToe
 {
-    class MyForm : Form
+    class TicTacToeForm : Form
     {
-        GameModel game;
-        TableLayoutPanel table;
+        private GameModel game;
+        private TableLayoutPanel table;
 
-        public MyForm(GameModel game)
+        public TicTacToeForm(GameModel game)
         {
 			this.game = game;
 			table = new TableLayoutPanel();
 
 			table.RowStyles.Add(new RowStyle(SizeType.Percent, 10f));
 
-			for (int i = 0; i < game.Size; i++)
+			for (int i = 0; i < game.size; i++)
 			{
-				table.RowStyles.Add(new RowStyle(SizeType.Percent, 90f / game.Size));
-				table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / game.Size));
+				table.RowStyles.Add(new RowStyle(SizeType.Percent, 90f / game.size));
+				table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / game.size));
 			}
 
-			TextBox textBox1 = new TextBox();
-			textBox1.Dock = DockStyle.Fill;
-			table.Controls.Add(textBox1, 0, 0);
-			table.SetColumnSpan(textBox1, 3);
+			TextBox textBox = new TextBox();
+			textBox.Dock = DockStyle.Fill;
+			table.Controls.Add(textBox, 0, 0);
+			table.SetColumnSpan(textBox, 3);
 
-			for (int column = 0; column <= game.Size; column++)
-				for (int row = 1; row <= game.Size; row++)
+			for (int column = 0; column <= game.size; column++)
+				for (int row = 1; row <= game.size; row++)
 				{
 					var iRow = row;
 					var iColumn = column;
 					var button = new Button();
 					button.Dock = DockStyle.Fill;
-					button.Click += (sender, args) => 
+					button.Click += (sender, args) =>
 						{
 							game.Move(iRow - 1, iColumn);
-							textBox1.Text = game.GetGameStatus(); 
+							textBox.Text = game.GetGameStatus();
 						};
 					table.Controls.Add(button, iColumn, iRow);
 				}
@@ -51,7 +51,6 @@ namespace TicTacToe
 
 			game.StateChanged += (row, column, state) =>
 			{
-				((Button)table.GetControlFromPosition(column, row + 1)).BackColor = state == StatesField.EmptyField ? Color.Black : Color.White;
 				((Button)table.GetControlFromPosition(column, row + 1)).Text = state == StatesField.Cross ? "X" : "O";
 			};
 
@@ -66,7 +65,7 @@ namespace TicTacToe
         {
             var game = new GameModel();
             game.Start();
-			Application.Run(new MyForm(game) { ClientSize = new Size(300, 300) });
+			Application.Run(new TicTacToeForm(game) { ClientSize = new Size(300, 300) });
 		}
 	}
 }
